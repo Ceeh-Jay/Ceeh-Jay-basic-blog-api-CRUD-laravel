@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\PostController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -16,6 +17,17 @@ Route::post('/refresh', [AuthController::class, 'refresh'])->middleware('auth:ap
 Route::post('/me', [AuthController::class,'me'])->middleware('auth:api')->name('me');
 });
 
-Route::get('/user', function (Request $request) {
-    return $request->user();
-})->middleware('auth:sanctum');
+
+//post related route
+Route::middleware('auth:api')->group(function(){
+    Route::post('post', [PostController::class, 'store']);
+    Route::patch('post/{id}', [PostController::class, 'update']);
+    Route::delete('post/{id}', [PostController::class,'destroy']);
+});
+
+//Public routes for viewing posts
+Route::get('posts', [PostController::class, 'index']);
+
+// Route::get('/user', function (Request $request) {
+//     return $request->user();
+// })->middleware('auth:sanctum');

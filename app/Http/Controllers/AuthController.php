@@ -42,6 +42,11 @@ class AuthController extends Controller
 
     public function me()
     {
+        $user = auth('api')->user();
+
+        if (!$user) {
+            return response()->json(['error' => 'Not authorized for this action'], 401);
+        }
         return response()->json(auth('api')->user());
     }
 
